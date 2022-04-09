@@ -22,8 +22,12 @@ def pregunta_01():
     40
 
     """
-    return
-
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    numerofilas = tbl0.shape
+    numero =numerofilas[0]    
+    
+    return numero
 
 def pregunta_02():
     """
@@ -33,9 +37,13 @@ def pregunta_02():
     4
 
     """
-    return
-
-
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    numerocolumna = tbl0.shape
+    numero =numerocolumna[1]    
+    
+    return numero
+    
 def pregunta_03():
     """
     ¿Cuál es la cantidad de registros por cada letra de la columna _c1 del archivo
@@ -50,8 +58,12 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return
-
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    setcolumnauno = tbl0.filter(items=["_c1"])
+    cuentaColumnaUno = setcolumnauno.groupby("_c1")["_c1"].count()
+    
+    return cuentaColumnaUno
 
 def pregunta_04():
     """
@@ -65,8 +77,12 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
-
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    setcolumnauno = tbl0.filter(items=["_c1", "_c2"])
+    promedioColumnados = setcolumnauno.groupby("_c1")["_c2"].mean()
+    
+    return promedioColumnados
 
 def pregunta_05():
     """
@@ -82,7 +98,12 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    setcolumnauno = tbl0.filter(items=["_c1", "_c2"])
+    maxColumnados = setcolumnauno.groupby("_c1")["_c2"].max()
+    
+    return maxColumnados
 
 
 def pregunta_06():
@@ -94,8 +115,14 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return
-
+    tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
+    
+    setcolumncuatro = tbl1.filter(items=["_c4"])
+    setcolumncuatro = setcolumncuatro["_c4"].unique()
+    litvaloresUnicos =[ x.upper() for x in setcolumncuatro]
+    litvaloresUnicos = sorted(litvaloresUnicos)
+    
+    return litvaloresUnicos
 
 def pregunta_07():
     """
@@ -109,9 +136,13 @@ def pregunta_07():
     D    23
     E    67
     Name: _c2, dtype: int64
-    """
-    return
-
+    """    
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    setcolumnauno = tbl0.filter(items=["_c1","_c2"])
+    valoresUnicosColumnados = setcolumnauno.groupby("_c1")["_c2"].sum()
+    
+    return valoresUnicosColumnados
 
 def pregunta_08():
     """
@@ -128,8 +159,11 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return
-
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    tbl0['suma'] = tbl0['_c0'] + tbl0['_c2']
+        
+    return tbl0
 
 def pregunta_09():
     """
@@ -146,8 +180,12 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
 
+    tbl0['year'] = pd.to_datetime(tbl0['_c3'],infer_datetime_format=True,errors='coerce')
+    tbl0['year'] = tbl0.year.dt.strftime("%Y")
+
+    return tbl0
 
 def pregunta_10():
     """
@@ -163,7 +201,14 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+        
+    setcolumnauno = tbl0.filter(items=["_c1","_c2"])
+    setcolumnauno = setcolumnauno.sort_values("_c2",ascending=True)
+    setcolumnauno["_c2"] = setcolumnauno["_c2"].apply(lambda x: str(x))    
+    setcolumnauno.groupby(["_c1"], as_index=False).agg({"_c2": ":".join})
+    
+    return setcolumnauno
 
 
 def pregunta_11():
@@ -182,7 +227,14 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+    tbl1 = pd.read_csv("tbl1.tsv", sep="\t")
+    
+    setcolumna = tbl1.filter(items=["_c0","_c4"])
+    setcolumna = setcolumna.sort_values("_c4",ascending=True)
+    setcolumna["_c4"] = setcolumna["_c4"].apply(lambda x: str(x))    
+    setcolumna.groupby(["_c0"], as_index=False).agg({"_c4": ",".join})
+    
+    return setcolumna
 
 
 def pregunta_12():
@@ -200,7 +252,13 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
+    
+    setcolumna = tbl2.sort_values(["_c0","_c5a","_c5b"],ascending=True)
+    setcolumna["_c5"] = setcolumna["_c5a"].map(str) + ":" + setcolumna["_c5b"].map(str) 
+    setcolumna.groupby(["_c0"], as_index=False).agg({"_c5": ",".join})
+    
+    return setcolumna
 
 
 def pregunta_13():
@@ -217,4 +275,5 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
+
     return
