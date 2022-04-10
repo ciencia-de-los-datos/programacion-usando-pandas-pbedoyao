@@ -208,7 +208,7 @@ def pregunta_10():
     setcolumnauno["_c2"] = setcolumnauno["_c2"].apply(lambda x: str(x))    
     setcolumnaresultado = setcolumnauno.groupby(["_c1"], as_index=False).agg({"_c2": ":".join})
     
-    return setcolumnauno
+    return setcolumnaresultado
 
 
 def pregunta_11():
