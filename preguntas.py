@@ -182,8 +182,8 @@ def pregunta_09():
     """
     tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
 
-    tbl0['year'] = pd.to_datetime(tbl0['_c3'],infer_datetime_format=True,errors='coerce')
-    tbl0['year'] = tbl0.year.dt.strftime("%Y")
+    tbl0['year'] = pd.to_datetime(tbl0['_c3'],infer_datetime_format=True,errors='ignore')
+    tbl0['year'] = tbl0['year'].apply(lambda x: str(x)[0:4]) 
 
     return tbl0
 
@@ -206,7 +206,8 @@ def pregunta_10():
     setcolumnauno = tbl0.filter(items=["_c1","_c2"])
     setcolumnauno = setcolumnauno.sort_values("_c2",ascending=True)
     setcolumnauno["_c2"] = setcolumnauno["_c2"].apply(lambda x: str(x))    
-    setcolumnauno.groupby(["_c1"], as_index=False).agg({"_c2": ":".join})
+    setcolumnauno = setcolumnauno.groupby(["_c1"], as_index=False).agg({"_c2": ":".join})
+    setcolumnauno.rename(columns={'_c1':'_c0', '_c2': '_c1'}, inplace=True)    
     
     return setcolumnauno
 
@@ -260,7 +261,6 @@ def pregunta_12():
     
     return setcolumna
 
-
 def pregunta_13():
     """
     Si la columna _c0 es la clave en los archivos `tbl0.tsv` y `tbl2.tsv`, compute la
@@ -275,5 +275,11 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-
-    return
+    tbl2 = pd.read_csv("tbl2.tsv", sep="\t")
+    tbl0 = pd.read_csv("tbl0.tsv", sep="\t")
+    
+    valoresUnicosColumnados = pd.DataFrame(tbl2.groupby("_c0")["_c5b"].sum())
+    resultado = pd.merge(tbl0, valoresUnicosColumnados, how='inner', on=("_c0"))
+    resultado = resultado.groupby("_c1")["_c5b"].sum()    
+    
+    return resultado
