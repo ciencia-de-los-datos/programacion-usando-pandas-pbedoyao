@@ -206,8 +206,7 @@ def pregunta_10():
     setcolumnauno = tbl0.filter(items=["_c1","_c2"])
     setcolumnauno = setcolumnauno.sort_values("_c2",ascending=True)
     setcolumnauno["_c2"] = setcolumnauno["_c2"].apply(lambda x: str(x))    
-    setcolumnauno = setcolumnauno.groupby(["_c1"], as_index=False).agg({"_c2": ":".join})
-    setcolumnauno = setcolumnauno.rename(columns={'_c1':'_c0', '_c2': '_c1'}, inplace=True)    
+    setcolumnaresultado = setcolumnauno.groupby(["_c1"], as_index=False).agg({"_c2": ":".join})
     
     return setcolumnauno
 
