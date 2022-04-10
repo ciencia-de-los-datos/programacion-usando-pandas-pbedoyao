@@ -207,7 +207,7 @@ def pregunta_10():
     setcolumnauno = setcolumnauno.sort_values("_c2",ascending=True)
     setcolumnauno["_c2"] = setcolumnauno["_c2"].apply(lambda x: str(x))    
     setcolumnauno = setcolumnauno.groupby(["_c1"], as_index=False).agg({"_c2": ":".join})
-    setcolumnauno.rename(columns={'_c1':'_c0', '_c2': '_c1'}, inplace=True)    
+    setcolumnauno = setcolumnauno.rename(columns={'_c1':'_c0', '_c2': '_c1'}, inplace=True)    
     
     return setcolumnauno
 
@@ -233,9 +233,9 @@ def pregunta_11():
     setcolumna = tbl1.filter(items=["_c0","_c4"])
     setcolumna = setcolumna.sort_values("_c4",ascending=True)
     setcolumna["_c4"] = setcolumna["_c4"].apply(lambda x: str(x))    
-    setcolumna.groupby(["_c0"], as_index=False).agg({"_c4": ",".join})
+    setcolumnaresultado = setcolumna.groupby(["_c0"], as_index=False).agg({"_c4": ",".join})   
     
-    return setcolumna
+    return setcolumnaresultado
 
 
 def pregunta_12():
@@ -257,9 +257,9 @@ def pregunta_12():
     
     setcolumna = tbl2.sort_values(["_c0","_c5a","_c5b"],ascending=True)
     setcolumna["_c5"] = setcolumna["_c5a"].map(str) + ":" + setcolumna["_c5b"].map(str) 
-    setcolumna.groupby(["_c0"], as_index=False).agg({"_c5": ",".join})
+    setcolumnaresultado = setcolumna.groupby(["_c0"], as_index=False).agg({"_c5": ",".join})
     
-    return setcolumna
+    return setcolumnaresultado
 
 def pregunta_13():
     """
